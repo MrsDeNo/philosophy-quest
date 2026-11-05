@@ -1,273 +1,153 @@
 import { useMemo, useState } from 'react';
 
 const philosophers = [
-  { name: 'Plato', title: 'The Apprentice of Eternal Truths', summary: 'Plato believed education should guide students toward enduring truths and the good life.', focus: 'Reason, virtue, and the pursuit of truth.' },
-  { name: 'Aristotle', title: 'The Scholar of Practice', summary: 'Aristotle connected learning to habit, wisdom, and the development of character.', focus: 'Reason, virtue, and practical knowledge.' },
-  { name: 'Locke', title: 'The Builder of Observed Experience', summary: 'John Locke emphasized experience, sensory learning, and the careful shaping of the mind.', focus: 'Empiricism and evidence-based learning.' },
-  { name: 'Rousseau', title: 'The Guardian of Natural Learning', summary: 'Rousseau trusted the child’s natural curiosity and the value of freedom in education.', focus: 'Nature, freedom, and authentic development.' },
-  { name: 'Montessori', title: 'The Keeper of Self-Directed Growth', summary: 'Montessori encouraged independent exploration, prepared environments, and child-led discovery.', focus: 'Choice, independence, and hands-on mastery.' },
-  { name: 'Dewey', title: 'The Explorer of Experience', summary: 'Dewey taught that learning grows from authentic experience, problem solving, and democratic life.', focus: 'Inquiry, collaboration, and reflective practice.' },
-  { name: 'Freire', title: 'The Voice of Critical Consciousness', summary: 'Paulo Freire argued education should challenge oppression and empower students as co-creators of meaning.', focus: 'Dialogue, justice, and transformation.' },
-  { name: 'Noddings', title: 'The Caretaker of Relational Learning', summary: 'Noddings believed caring relationships are the heart of educational practice.', focus: 'Empathy, trust, and relational pedagogy.' },
-  { name: 'Counts', title: 'The Architect of Social Change', summary: 'George Counts pushed schools to help students confront social problems and build a better world.', focus: 'Democracy, justice, and societal improvement.' },
+  { id: 'plato', name: 'Plato', years: 'c. 428–348 BCE', image: 'Plato_Silanion_Musei_Capitolini_MC1377.jpg', tradition: 'Perennialism / Idealism', beliefs: 'Education turns the soul toward enduring truth and the good. In the Republic, learning is connected to justice, virtue, and thoughtful leadership.', contributions: 'Founded the Academy in Athens; the Socratic dialogue and the Allegory of the Cave remain influential ways to think about inquiry and education.', classroom: 'Use dialogue, abstract questions, and enduring works to help learners examine assumptions.' },
+  { id: 'aristotle', name: 'Aristotle', years: '384–322 BCE', image: 'Aristotle Altemps Inv8575.jpg', tradition: 'Perennialism / Realism', beliefs: 'Knowledge develops through observation, reason, and experience. Education should cultivate intellectual and moral virtues through practice.', contributions: 'Founded the Lyceum and advanced systematic study across logic, biology, ethics, and politics; his emphasis on habit and practical wisdom influenced education for centuries.', classroom: 'Connect evidence and observation with discussion, practice, and the development of good judgment.' },
+  { id: 'locke', name: 'John Locke', years: '1632–1704', image: 'John Locke by Godfrey Kneller.jpg', tradition: 'Empiricism', beliefs: 'Experience shapes knowledge; the mind is not born with fully formed ideas. Education and environment strongly influence character and understanding.', contributions: 'His writing on experience, reason, and education helped shape modern empiricism and liberal educational thought.', classroom: 'Build learning from observation and experience, and use thoughtful guidance to develop habits and judgment.' },
+  { id: 'rousseau', name: 'Jean-Jacques Rousseau', years: '1712–1778', image: 'Jean-Jacques Rousseau (painted portrait).jpg', tradition: 'Naturalism', beliefs: 'Children have distinctive developmental needs. Education should respect growth and allow discovery rather than force adult expectations too early.', contributions: 'Émile, or On Education challenged conventional schooling and became a major influence on child-centered and developmental approaches.', classroom: 'Offer developmentally appropriate experiences, exploration, and room for learners to encounter consequences.' },
+  { id: 'montessori', name: 'Maria Montessori', years: '1870–1952', image: 'Maria Montessori 1913.jpg', tradition: 'Progressivism / Child-centered education', beliefs: 'Children learn actively and independently in a carefully prepared environment. Respect, concentration, choice, and hands-on materials support development.', contributions: 'Developed the Montessori method and materials, emphasizing mixed-age communities, self-directed work, and the teacher as a careful observer and guide.', classroom: 'Prepare accessible materials, allow purposeful choice, and support focused work at each learner’s pace.' },
+  { id: 'dewey', name: 'John Dewey', years: '1859–1952', image: 'John Dewey in 1902.jpg', tradition: 'Progressivism / Pragmatism', beliefs: 'Learning grows through experience, reflection, inquiry, and participation in democracy. School is a community where learners investigate meaningful problems.', contributions: 'A leading pragmatist educator, Dewey advanced experiential learning, reflective inquiry, and democratic schooling through works including Democracy and Education.', classroom: 'Organize collaborative projects around real questions; help students reflect on evidence and consequences.' },
+  { id: 'freire', name: 'Paulo Freire', years: '1921–1997', image: 'Paulo Freire.jpg', tradition: 'Critical pedagogy / Reconstructionism', beliefs: 'Education should be dialogic rather than a one-way “banking” model. Learners can develop critical consciousness and act to transform unjust conditions.', contributions: 'Pedagogy of the Oppressed became foundational to critical pedagogy and adult literacy education around the world.', classroom: 'Use dialogue and problem-posing to connect learners’ lived experience to critical analysis and action.' },
+  { id: 'noddings', name: 'Nel Noddings', years: '1929–2022', image: 'Nel Noddings.jpg', tradition: 'Ethics of care', beliefs: 'Caring relations are central to ethical life and education. Teaching requires attentiveness, dialogue, and responsiveness to particular learners.', contributions: 'Her care ethics brought sustained attention to relationships, schools, and moral education; Caring: A Feminine Approach to Ethics and Moral Education is a key work.', classroom: 'Build trusting relationships, listen closely, and respond to students as individuals.' },
+  { id: 'counts', name: 'George S. Counts', years: '1889–1974', image: 'George S. Counts.jpg', tradition: 'Social reconstructionism', beliefs: 'Schools are part of society and should help learners understand and address social problems rather than simply reproduce the status quo.', contributions: 'Dare the School Build a New Social Order? challenged educators to take social responsibility and helped shape reconstructionist educational thought.', classroom: 'Study community issues, consider whose interests are served, and work toward informed democratic change.' },
 ];
 
-// The code word at each chamber position is fixed. The challenge shown in that
-// position is randomly selected at page load, independently of its code word.
-const escapeCodeWords = [
-  'WISDOM', 'EXPERIENCE', 'CHOICE', 'FOUNDATION', 'REINFORCEMENT',
-  'TRANSFORM', 'DISCOVERY', 'TRUTH', 'AUTHENTICITY', 'JUSTICE',
-];
-
+const escapeCodeWords = ['WISDOM', 'EXPERIENCE', 'CHOICE', 'FOUNDATION', 'REINFORCEMENT', 'TRANSFORM', 'DISCOVERY', 'TRUTH', 'AUTHENTICITY', 'JUSTICE'];
 const challengeBank = [
   { title: 'The Library of Eternal Truths', clue: 'Students should study the greatest works of civilization because truth is timeless and unchanging.', options: ['Progressivism', 'Essentialism', 'Perennialism', 'Existentialism'], answer: 'Perennialism' },
   { title: 'The Hall of Experience', clue: 'Students learn best when they investigate problems, collaborate, and learn by doing.', options: ['Progressivism', 'Essentialism', 'Behaviorism', 'Perennialism'], answer: 'Progressivism' },
   { title: 'The Chamber of Freedom', clue: 'A student says, “I want to choose my own learning path and determine what gives my life meaning.”', options: ['Reconstructionism', 'Perennialism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
-  { title: 'The Vault of Core Knowledge', clue: 'An old principal declares that schools must ensure every student masters essential academic content and foundational skills.', options: ['Essentialism', 'Progressivism', 'Existentialism', 'Behaviorism'], answer: 'Essentialism' },
-  { title: 'The Laboratory of Conditioning', clue: 'A teacher rewards students with tokens for desired behaviors. Students can exchange tokens for privileges.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Behaviorism' },
+  { title: 'The Vault of Core Knowledge', clue: 'Schools must ensure every student masters essential academic content and foundational skills.', options: ['Essentialism', 'Progressivism', 'Existentialism', 'Behaviorism'], answer: 'Essentialism' },
+  { title: 'The Laboratory of Conditioning', clue: 'A teacher rewards students with tokens for desired behaviors, which they exchange for privileges.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Behaviorism' },
   { title: 'The Civic Action Center', clue: 'Students research homelessness and design solutions to improve their community.', options: ['Essentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Reconstructionism' },
   { title: 'Montessori’s Secret Garden', clue: 'Students independently select materials, work at their own pace, and learn through exploration.', options: ['Essentialism', 'Behaviorism', 'Progressivism', 'Perennialism'], answer: 'Progressivism' },
-  { title: 'The Great Books Gallery', clue: 'Students discuss Plato, Aristotle, Shakespeare, and other classic authors to understand enduring human questions.', options: ['Existentialism', 'Behaviorism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism' },
-  { title: 'The Reflection Chamber', clue: 'Students write journals exploring questions such as “Who am I?” and “What kind of person do I want to become?”', options: ['Essentialism', 'Progressivism', 'Behaviorism', 'Existentialism'], answer: 'Existentialism' },
+  { title: 'The Great Books Gallery', clue: 'Students discuss classic authors to understand enduring human questions.', options: ['Existentialism', 'Behaviorism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism' },
+  { title: 'The Reflection Chamber', clue: 'Students journal about “Who am I?” and “What kind of person do I want to become?”', options: ['Essentialism', 'Progressivism', 'Behaviorism', 'Existentialism'], answer: 'Existentialism' },
   { title: 'The Final Academy Lock', clue: 'The purpose of education is to create a more just and equitable society.', options: ['Essentialism', 'Perennialism', 'Reconstructionism', 'Behaviorism'], answer: 'Reconstructionism' },
-  { title: 'The Socratic Portrait Room', clue: 'Learners examine enduring questions about justice and virtue by discussing classic texts across generations.', options: ['Behaviorism', 'Progressivism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism' },
-  { title: 'The Workshop of Invention', clue: 'Teams design, test, and improve a bridge, using each attempt as a chance to learn from experience.', options: ['Progressivism', 'Essentialism', 'Existentialism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Socratic Portrait Room', clue: 'Learners discuss classic texts and enduring questions about justice and virtue.', options: ['Behaviorism', 'Progressivism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism' },
+  { title: 'The Workshop of Invention', clue: 'Teams design, test, and improve a bridge, learning from each attempt.', options: ['Progressivism', 'Essentialism', 'Existentialism', 'Perennialism'], answer: 'Progressivism' },
   { title: 'The Academy’s Core Curriculum', clue: 'Every student follows a carefully sequenced program in literacy, mathematics, science, and history.', options: ['Reconstructionism', 'Essentialism', 'Progressivism', 'Behaviorism'], answer: 'Essentialism' },
-  { title: 'The Chamber of Chosen Paths', clue: 'Students choose a topic that matters to them and explain how their project expresses their own values and purpose.', options: ['Perennialism', 'Behaviorism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
+  { title: 'The Chamber of Chosen Paths', clue: 'Students choose a meaningful topic and explain how their project expresses their values and purpose.', options: ['Perennialism', 'Behaviorism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
   { title: 'The Community Inquiry Room', clue: 'A class studies unequal access to fresh food and works with neighbors on community-led solutions.', options: ['Essentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Reconstructionism' },
-  { title: 'The Bell of Positive Practice', clue: 'A teacher gives immediate praise and a class privilege when learners demonstrate a clearly defined routine.', options: ['Existentialism', 'Progressivism', 'Behaviorism', 'Perennialism'], answer: 'Behaviorism' },
-  { title: 'The Fieldwork Conservatory', clue: 'Learners follow questions raised during a nature walk, gather evidence, and share what they discover.', options: ['Perennialism', 'Progressivism', 'Essentialism', 'Behaviorism'], answer: 'Progressivism' },
-  { title: 'The Gallery of Great Ideas', clue: 'Students compare classic works to explore questions about human nature that remain important in every era.', options: ['Reconstructionism', 'Behaviorism', 'Perennialism', 'Existentialism'], answer: 'Perennialism' },
-  { title: 'The Foundational Skills Forge', clue: 'The teacher explicitly models essential reading and arithmetic skills, then guides students through structured practice.', options: ['Essentialism', 'Progressivism', 'Reconstructionism', 'Existentialism'], answer: 'Essentialism' },
+  { title: 'The Bell of Positive Practice', clue: 'A teacher gives immediate praise and a class privilege for a clearly defined routine.', options: ['Existentialism', 'Progressivism', 'Behaviorism', 'Perennialism'], answer: 'Behaviorism' },
+  { title: 'The Fieldwork Conservatory', clue: 'Learners follow questions from a nature walk, gather evidence, and share their discoveries.', options: ['Perennialism', 'Progressivism', 'Essentialism', 'Behaviorism'], answer: 'Progressivism' },
+  { title: 'The Gallery of Great Ideas', clue: 'Students compare classic works to explore questions about human nature across eras.', options: ['Reconstructionism', 'Behaviorism', 'Perennialism', 'Existentialism'], answer: 'Perennialism' },
+  { title: 'The Foundational Skills Forge', clue: 'The teacher models essential reading and arithmetic skills, then guides structured practice.', options: ['Essentialism', 'Progressivism', 'Reconstructionism', 'Existentialism'], answer: 'Essentialism' },
   { title: 'The Journal of Becoming', clue: 'Learners reflect on personal choices and decide what kind of people they hope to become.', options: ['Behaviorism', 'Perennialism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
-  { title: 'The Justice Campaign Hall', clue: 'Students investigate barriers to accessibility at school and present an advocacy plan to decision-makers.', options: ['Progressivism', 'Reconstructionism', 'Behaviorism', 'Perennialism'], answer: 'Reconstructionism' },
-  { title: 'The Token Keeper’s Study', clue: 'Students earn tokens for specific observable actions and exchange them for classroom privileges.', options: ['Behaviorism', 'Existentialism', 'Perennialism', 'Progressivism'], answer: 'Behaviorism' },
-  { title: 'The Collaborative Problem Lab', clue: 'A teacher builds a unit around a real question from students, who investigate it together and learn through the process.', options: ['Essentialism', 'Behaviorism', 'Progressivism', 'Perennialism'], answer: 'Progressivism' },
-  { title: 'The Hall of Essential Lessons', clue: 'Students are expected to master a shared body of academic knowledge and foundational skills before advancing.', options: ['Existentialism', 'Essentialism', 'Reconstructionism', 'Progressivism'], answer: 'Essentialism' },
-  { title: 'The Compass of Identity', clue: 'Students consider different possible futures and make authentic choices about the direction of their learning.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Existentialism' },
-  { title: 'The Ancient Questions Alcove', clue: 'A seminar uses enduring literature to consider truth, goodness, and the questions shared across human history.', options: ['Perennialism', 'Progressivism', 'Behaviorism', 'Essentialism'], answer: 'Perennialism' },
+  { title: 'The Justice Campaign Hall', clue: 'Students investigate barriers to accessibility at school and present an advocacy plan.', options: ['Progressivism', 'Reconstructionism', 'Behaviorism', 'Perennialism'], answer: 'Reconstructionism' },
+  { title: 'The Token Keeper’s Study', clue: 'Students earn tokens for specific observable actions and exchange them for privileges.', options: ['Behaviorism', 'Existentialism', 'Perennialism', 'Progressivism'], answer: 'Behaviorism' },
+  { title: 'The Collaborative Problem Lab', clue: 'Students investigate a real question together, learning through inquiry and reflection.', options: ['Essentialism', 'Behaviorism', 'Progressivism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Hall of Essential Lessons', clue: 'Students master a shared body of academic knowledge and foundational skills before advancing.', options: ['Existentialism', 'Essentialism', 'Reconstructionism', 'Progressivism'], answer: 'Essentialism' },
+  { title: 'The Compass of Identity', clue: 'Students consider possible futures and make authentic choices about their learning direction.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Existentialism' },
+  { title: 'The Ancient Questions Alcove', clue: 'A seminar uses enduring literature to consider truth and goodness across human history.', options: ['Perennialism', 'Progressivism', 'Behaviorism', 'Essentialism'], answer: 'Perennialism' },
   { title: 'The Practice and Praise Chamber', clue: 'Learners receive consistent feedback and a small reward after demonstrating a target behavior.', options: ['Reconstructionism', 'Behaviorism', 'Existentialism', 'Perennialism'], answer: 'Behaviorism' },
-  { title: 'The Neighborhood Forum', clue: 'Students and community members discuss a local problem and plan collective action for change.', options: ['Essentialism', 'Perennialism', 'Reconstructionism', 'Behaviorism'], answer: 'Reconstructionism' },
-  { title: 'The Garden of Guided Discovery', clue: 'Children select hands-on materials, explore at their own pace, and build understanding through purposeful activity.', options: ['Progressivism', 'Behaviorism', 'Essentialism', 'Perennialism'], answer: 'Progressivism' },
-  { title: 'The Lantern of Timeless Wisdom', clue: 'Students study enduring philosophical and literary works to seek ideas that transcend a particular time or place.', options: ['Existentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Perennialism' },
+  { title: 'The Neighborhood Forum', clue: 'Students and community members discuss a local problem and plan collective action.', options: ['Essentialism', 'Perennialism', 'Reconstructionism', 'Behaviorism'], answer: 'Reconstructionism' },
+  { title: 'The Garden of Guided Discovery', clue: 'Children select hands-on materials, explore at their own pace, and learn through purposeful activity.', options: ['Progressivism', 'Behaviorism', 'Essentialism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Lantern of Timeless Wisdom', clue: 'Students study enduring philosophical and literary works to seek ideas that transcend time and place.', options: ['Existentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Perennialism' },
 ];
 
-function shuffleAndAssignCodes(challenges) {
-  const shuffled = [...challenges];
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+const philosophies = ['Perennialism', 'Progressivism', 'Essentialism', 'Existentialism', 'Behaviorism', 'Reconstructionism'];
+const philosophyResults = { essentialism: 'Essentialist', progressivism: 'Progressive', reconstructionism: 'Reconstructionist', behaviorism: 'Behaviorist', existentialism: 'Existentialist', perennialism: 'Perennialist' };
+const matchStatements = [
+  ['A shared foundation of core academic knowledge is essential for every student.', 'Essentialism'], ['Students learn deeply when they investigate authentic problems.', 'Progressivism'], ['Classic works raise questions that remain valuable across generations.', 'Perennialism'], ['Learners should make meaningful choices and take responsibility for them.', 'Existentialism'], ['Specific feedback and reinforcement can support learning goals.', 'Behaviorism'], ['Schools should help students understand and address social injustice.', 'Reconstructionism'],
+  ['Teachers should explicitly teach foundational skills and important content.', 'Essentialism'], ['Learning should connect to students’ interests and lived experiences.', 'Progressivism'], ['Reasoned discussion of enduring ideas belongs at the heart of education.', 'Perennialism'], ['Education should support each person in making a life of meaning.', 'Existentialism'], ['Observable goals help teachers assess learning and adjust instruction.', 'Behaviorism'], ['Classrooms can prepare students to participate in improving society.', 'Reconstructionism'],
+  ['A coherent curriculum helps students build knowledge systematically.', 'Essentialism'], ['Hands-on projects can make ideas meaningful and memorable.', 'Progressivism'], ['Students benefit from studying influential texts and enduring questions.', 'Perennialism'], ['Personal reflection is important for learners to understand who they are becoming.', 'Existentialism'], ['Practice paired with timely consequences can shape habits.', 'Behaviorism'], ['Education should examine how power and inequity affect people’s lives.', 'Reconstructionism'],
+  ['Teachers should ensure students master essential facts, concepts, and skills.', 'Essentialism'], ['Collaboration and inquiry are central parts of learning.', 'Progressivism'], ['The great questions of human life deserve sustained study.', 'Perennialism'], ['Learners should have room to choose paths that reflect their values.', 'Existentialism'], ['Clear expectations and consistent feedback support behavior change.', 'Behaviorism'], ['Students should use learning to contribute to community change.', 'Reconstructionism'],
+  ['Academic rigor and a common curriculum prepare students for future learning.', 'Essentialism'], ['Reflection on experience helps students grow from doing.', 'Progressivism'], ['Education should introduce learners to enduring intellectual traditions.', 'Perennialism'], ['Authentic choice matters more than simply conforming to expectations.', 'Existentialism'], ['Breaking a complex skill into observable steps can help track progress.', 'Behaviorism'], ['Students should critically question conditions that create social problems.', 'Reconstructionism'],
+  ['The teacher has a responsibility to make core knowledge accessible to all.', 'Essentialism'], ['Student questions can help shape what the class investigates.', 'Progressivism'], ['Careful reading and dialogue about classic ideas develop judgment.', 'Perennialism'], ['Learners should be encouraged to define their own purposes.', 'Existentialism'], ['Positive reinforcement can encourage useful classroom routines.', 'Behaviorism'], ['Education can empower learners to challenge unfair systems.', 'Reconstructionism'],
+];
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
   }
-  return shuffled.slice(0, 10).map((challenge, index) => ({
-    ...challenge,
-    code: escapeCodeWords[index],
-  }));
+  return result;
 }
+function makeEscapeRooms() { return shuffle(challengeBank).slice(0, 10).map((challenge, index) => ({ ...challenge, code: escapeCodeWords[index] })); }
+function makeMatchQuestions() { return shuffle(matchStatements).slice(0, 15).map(([statement, philosophy]) => ({ statement, philosophy })); }
 
-const quizQuestions = [
-  { question: 'Students should master a common core of knowledge.', type: 'essentialism' },
-  { question: 'Learning should begin with student interests.', type: 'progressivism' },
-  { question: 'Schools should actively address social problems.', type: 'reconstructionism' },
-  { question: 'Reinforcement is an effective learning tool.', type: 'behaviorism' },
-  { question: 'Students should define personal meaning.', type: 'existentialism' },
-  { question: 'Great books remain valuable.', type: 'perennialism' },
-  { question: 'Experience is the best teacher.', type: 'progressivism' },
-  { question: 'Academic discipline is essential.', type: 'essentialism' },
+const detectiveCases = [
+  { title: 'Great Books Seminar', answer: 'Perennialism', clue: 'This classroom values timeless texts and disciplined thinking.' },
+  { title: 'Community Garden Project', answer: 'Reconstructionism', clue: 'Students investigate and address a real community challenge.' },
+  { title: 'Direct Instruction Academy', answer: 'Essentialism', clue: 'The teacher leads clear, structured content delivery.' },
+  { title: 'Token Economy', answer: 'Behaviorism', clue: 'Rewards and reinforcement guide student behavior.' },
+  { title: 'Passion Project', answer: 'Existentialism', clue: 'Students make choices that shape personal meaning.' },
 ];
-
-const philosophyResults = {
-  essentialism: 'Essentialist', progressivism: 'Progressive', reconstructionism: 'Reconstructionist',
-  behaviorism: 'Behaviorist', existentialism: 'Existentialist', perennialism: 'Perennialist',
-};
-
-const cases = [
-  { title: 'Great Books Seminar', answer: 'perennialism', clue: 'This classroom values timeless texts and disciplined thinking.' },
-  { title: 'Community Garden Project', answer: 'reconstructionism', clue: 'Students solve a real community challenge together.' },
-  { title: 'Direct Instruction Academy', answer: 'essentialism', clue: 'The teacher leads clear, structured content delivery.' },
-  { title: 'Token Economy', answer: 'behaviorism', clue: 'Rewards and reinforcement guide student behavior.' },
-  { title: 'Passion Project', answer: 'existentialism', clue: 'Students make choices that shape personal meaning.' },
-];
-
 const badges = ['Thinker Explorer', 'Philosophy Detective', 'Escape Survivor', 'Inventory Master', 'Reflection Scholar', 'Master of Educational Thought'];
-const finalEscapePhrase = escapeCodeWords.join(' → ');
 
 function App() {
-  const [escapeRooms] = useState(shuffleAndAssignCodes);
+  const [escapeRooms] = useState(makeEscapeRooms);
+  const [matchQuestions] = useState(makeMatchQuestions);
   const [selectedPhilosopher, setSelectedPhilosopher] = useState(philosophers[0]);
-  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [identityAnswers, setIdentityAnswers] = useState({ q1: '', q2: '', q3: '' });
-  const [currentCaseIndex, setCurrentCaseIndex] = useState(0);
+  const [selectedCompare, setSelectedCompare] = useState([]);
+  const [matchAnswers, setMatchAnswers] = useState({});
+  const [caseIndex, setCaseIndex] = useState(0);
   const [caseScore, setCaseScore] = useState(0);
+  const [caseFeedback, setCaseFeedback] = useState('');
   const [enteredAcademy, setEnteredAcademy] = useState(false);
   const [selectedEscapeRoom, setSelectedEscapeRoom] = useState(0);
   const [solvedEscapeRooms, setSolvedEscapeRooms] = useState([]);
   const [escapeFeedback, setEscapeFeedback] = useState('');
   const [finalCode, setFinalCode] = useState('');
   const [escaped, setEscaped] = useState(false);
+  const [profilesViewed, setProfilesViewed] = useState([]);
 
-  const currentQuestion = quizQuestions[currentQuizIndex];
-  const identityResult = useMemo(() => {
-    if (!identityAnswers.q1 || !identityAnswers.q2 || !identityAnswers.q3) return null;
-    const weighted = { essentialism: 0, progressivism: 0, reconstructionism: 0, behaviorism: 0, existentialism: 0, perennialism: 0 };
-    const answerMap = {
-      q1: { a: 'essentialism', b: 'progressivism', c: 'perennialism' },
-      q2: { a: 'reconstructionism', b: 'existentialism', c: 'progressivism' },
-      q3: { a: 'behaviorism', b: 'essentialism', c: 'perennialism' },
-    };
-    Object.entries(answerMap).forEach(([key, value]) => {
-      const philosophy = value[identityAnswers[key]];
-      if (philosophy) weighted[philosophy] += 1;
+  const identityScores = useMemo(() => {
+    const totals = Object.fromEntries(philosophies.map((name) => [name, 0]));
+    matchQuestions.forEach((question, index) => {
+      const answer = matchAnswers[index];
+      if (answer) totals[question.philosophy] += answer === 'agree' ? 2 : answer === 'unsure' ? 1 : 0;
     });
-    return Object.entries(weighted).sort((a, b) => b[1] - a[1])[0][0];
-  }, [identityAnswers]);
+    return totals;
+  }, [matchAnswers, matchQuestions]);
+  const answeredCount = Object.keys(matchAnswers).length;
+  const identityResult = answeredCount === matchQuestions.length ? Object.entries(identityScores).sort((a, b) => b[1] - a[1]).filter((entry) => entry[1] === Math.max(...Object.values(identityScores))).map(([name]) => name) : [];
+  const completedActivities = [enteredAcademy, profilesViewed.length >= philosophers.length, answeredCount === matchQuestions.length, caseIndex >= detectiveCases.length, escaped].filter(Boolean).length;
+  const progress = Math.round(completedActivities / 5 * 100);
+  const currentCase = detectiveCases[caseIndex];
+  const finalEscapePhrase = escapeCodeWords.join(' → ');
+  const compareProfiles = selectedCompare.map((id) => philosophers.find((item) => item.id === id)).filter(Boolean);
 
-  const progress = useMemo(() => {
-    const completed = [enteredAcademy, currentQuizIndex >= quizQuestions.length, currentCaseIndex >= cases.length, !!identityResult, solvedEscapeRooms.length === escapeRooms.length, escaped].filter(Boolean).length;
-    return Math.round((completed / 6) * 100);
-  }, [enteredAcademy, currentQuizIndex, currentCaseIndex, identityResult, solvedEscapeRooms.length, escapeRooms.length, escaped]);
-
-  const handleAnswer = (answerType) => {
-    if (answerType === currentQuestion.type) setScore((prev) => prev + 10);
-    setCurrentQuizIndex((prev) => prev + 1);
+  const selectCompare = (id) => setSelectedCompare((previous) => previous.includes(id) ? previous.filter((item) => item !== id) : previous.length < 3 ? [...previous, id] : previous);
+  const answerCase = (answer) => {
+    const correct = answer === currentCase.answer;
+    if (correct) setCaseScore((score) => score + 10);
+    setCaseFeedback(correct ? 'Correct! You earned 10 Knowledge Crystals.' : `Not quite. The answer was ${currentCase.answer}.`);
+    setCaseIndex((index) => index + 1);
   };
-
-  const handleCaseAnswer = (selectedAnswer) => {
-    const current = cases[currentCaseIndex];
-    if (selectedAnswer === current.answer) setCaseScore((prev) => prev + 10);
-    setCurrentCaseIndex((prev) => prev + 1);
-  };
-
   const answerEscapeRoom = (answer) => {
     const room = escapeRooms[selectedEscapeRoom];
-    if (answer !== room.answer) {
-      setEscapeFeedback('Not quite—review the clue and try again. The next chamber remains locked.');
-      return;
-    }
+    if (answer !== room.answer) { setEscapeFeedback('Not quite—study the clue and try again. The next chamber remains locked.'); return; }
     setSolvedEscapeRooms((previous) => previous.includes(selectedEscapeRoom) ? previous : [...previous, selectedEscapeRoom]);
-    setEscapeFeedback(`Correct! The chamber reveals its code word: ${room.code}`);
+    setEscapeFeedback(`Correct! Record this code on your quill and parchment: ${room.code}`);
   };
-
   const submitFinalCode = (event) => {
     event.preventDefault();
     const submitted = finalCode.trim().toUpperCase().replace(/\s*(?:→|,)\s*/g, ' → ');
-    if (submitted === finalEscapePhrase) {
-      setEscaped(true);
-      setEscapeFeedback('The final lock opens! You have escaped the Academy and earned the Master of Educational Thought badge.');
-    } else {
-      setEscapeFeedback('The sequence does not match the collected codes. Arrange all ten code words in the predetermined order and try again.');
-    }
+    if (submitted === finalEscapePhrase) { setEscaped(true); setEscapeFeedback('The final lock opens! You have escaped the Academy.'); }
+    else setEscapeFeedback('That sequence does not match. Arrange the ten recorded codes in the predetermined order and try again.');
   };
+  const unlockedBadges = badges.filter((_, index) => [enteredAcademy, caseIndex >= detectiveCases.length && caseScore > 0, escaped, answeredCount === matchQuestions.length, profilesViewed.length > 0, escaped][index]);
 
-  const unlockedBadges = badges.filter((_, index) => {
-    if (index === 0) return enteredAcademy;
-    if (index === 1) return caseScore >= 10;
-    if (index === 2) return escaped;
-    if (index === 3) return score >= 50;
-    if (index === 4) return identityResult;
-    if (index === 5) return escaped;
-    return false;
-  });
+  return <div className="app-shell">
+    <header className="topbar"><div className="crest">✦</div><div className="brand"><p className="eyebrow">A Museum of Educational Thought</p><h1>The Philosophy Quest</h1></div><button className="pill-btn" onClick={() => setEnteredAcademy(true)}>{enteredAcademy ? 'Academy Entered' : 'Enter the Academy'}</button></header>
+    {!enteredAcademy ? <main className="landing"><section className="hero-panel"><div className="hero-copy"><p className="eyebrow">Welcome to the Academy of Educational Thought</p><h2>A strange storm has trapped you inside the Academy.</h2><p>Explore the galleries, meet the great thinkers, test your educational philosophy, and unlock the chambers to find your way out.</p><button className="primary-btn" onClick={() => setEnteredAcademy(true)}>Enter the Academy</button></div><div className="crest-card"><div className="academy-crest">AET</div><span>Est. in the pursuit of wisdom</span></div></section></main> : <main className="quest-layout">
+      <aside className="sidebar"><div className="progress-box"><h3>Quest Progress</h3><div className="progress-bar"><span style={{ width: `${progress}%` }} /></div><p>{progress}% complete</p></div><div className="badge-box"><h3>Honors & Badges</h3><ul>{badges.map((badge) => <li key={badge} className={unlockedBadges.includes(badge) ? 'earned' : 'locked'}>{badge}</li>)}</ul><p className="crystal-total">Knowledge Crystals: <strong>✦ {caseScore}</strong></p></div></aside>
+      <section className="content-panel">
+        <section className="panel-section museum-section"><div className="section-heading"><p className="eyebrow">Portrait Gallery</p><h3>Hall of Thinkers</h3><p>Meet the educators and philosophers whose ideas shaped the academy.</p></div><div className="thinker-grid">{philosophers.map((philosopher) => <button key={philosopher.id} className={`thinker-card ${selectedPhilosopher.id === philosopher.id ? 'active' : ''}`} onClick={() => { setSelectedPhilosopher(philosopher); setProfilesViewed((seen) => seen.includes(philosopher.id) ? seen : [...seen, philosopher.id]); }}><img className="portrait-image" src={`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(philosopher.image)}?width=180`} alt={`Portrait of ${philosopher.name}`} loading="lazy" /><span>{philosopher.name}</span></button>)}</div><article className="thinker-details"><div><p className="eyebrow">{selectedPhilosopher.years}</p><h4>{selectedPhilosopher.name}</h4><p className="subtitle">{selectedPhilosopher.tradition}</p></div><div className="profile-facts"><div><h5>Beliefs</h5><p>{selectedPhilosopher.beliefs}</p></div><div><h5>Contributions</h5><p>{selectedPhilosopher.contributions}</p></div><div><h5>In the classroom</h5><p>{selectedPhilosopher.classroom}</p></div></div></article></section>
 
-  return (
-    <div className="app-shell">
-      <header className="topbar">
-        <div className="crest">✦</div>
-        <h1>The Philosophy Quest</h1>
-        <button className="pill-btn" onClick={() => setEnteredAcademy(true)}>{enteredAcademy ? 'Academy Entered' : 'Enter the Academy'}</button>
-      </header>
+        <section className="panel-section compare-section"><div className="section-heading"><p className="eyebrow">Curator’s Comparison Table</p><h3>Compare the Thinkers</h3><p>Select two or three portraits. Their ideas will appear in a Venn-style comparison display.</p></div><div className="compare-picker">{philosophers.map((p) => <label key={p.id}><input type="checkbox" checked={selectedCompare.includes(p.id)} disabled={!selectedCompare.includes(p.id) && selectedCompare.length >= 3} onChange={() => selectCompare(p.id)} />{p.name}</label>)}</div>{compareProfiles.length > 0 ? <div className={`venn-display venn-${compareProfiles.length}`}><div className="venn-common"><h4>Shared themes</h4><p>{compareProfiles.length > 1 ? 'Compare these thinkers’ views on the purpose of learning, the role of the teacher, and how learners grow.' : 'Select another thinker to reveal shared and contrasting ideas.'}</p>{compareProfiles.length > 1 && <ul><li>Each offers a theory about how education can support human development.</li><li>Each has influenced debates about teaching, learning, and society.</li></ul>}</div>{compareProfiles.map((p) => <article className="venn-person" key={p.id}><h4>{p.name}</h4><p className="subtitle">{p.tradition}</p><p><strong>Belief:</strong> {p.beliefs}</p><p><strong>Approach:</strong> {p.classroom}</p></article>)}</div> : <p className="empty-note">Choose up to three philosophers to begin your comparison.</p>}</section>
 
-      {!enteredAcademy ? (
-        <main className="landing">
-          <section className="hero-panel">
-            <div className="hero-copy">
-              <p className="eyebrow">Welcome to the Academy of Educational Thought</p>
-              <h2>A strange storm has trapped you inside the Academy of Educational Thought.</h2>
-              <p>To escape, you must learn the wisdom of the great philosophers, solve ancient challenges, unlock hidden chambers, and discover your own philosophy of education.</p>
-              <button className="primary-btn" onClick={() => setEnteredAcademy(true)}>Enter the Academy</button>
-            </div>
-            <div className="crest-card"><div className="academy-crest">AET</div><span>Academy of Educational Thought</span></div>
-          </section>
-        </main>
-      ) : (
-        <main className="quest-layout">
-          <aside className="sidebar">
-            <div className="progress-box"><h3>Quest Progress</h3><div className="progress-bar"><span style={{ width: `${progress}%` }} /></div><p>{progress}% complete</p></div>
-            <div className="badge-box"><h3>Badges</h3><ul>{badges.map((badge) => <li key={badge} className={unlockedBadges.includes(badge) ? 'earned' : 'locked'}>{badge}</li>)}</ul></div>
-          </aside>
+        <section className="panel-section inventory-section"><div className="section-heading"><p className="eyebrow">Your Philosophy Inventory</p><h3>Philosophy Match Challenge</h3><p>Answer 15 randomly selected statements from a pool of 45. Choose what best reflects your educational beliefs.</p></div>{answeredCount < matchQuestions.length ? <div className="quiz-card"><p className="quiz-score">Statement {answeredCount + 1} of {matchQuestions.length}</p><div className="inventory-progress"><span style={{ width: `${answeredCount / matchQuestions.length * 100}%` }} /></div><h4>{matchQuestions.find((_, index) => matchAnswers[index] === undefined)?.statement}</h4><div className="quiz-options"><button onClick={() => { const index = matchQuestions.findIndex((_, i) => matchAnswers[i] === undefined); setMatchAnswers((answers) => ({ ...answers, [index]: 'agree' })); }}>Agree</button><button onClick={() => { const index = matchQuestions.findIndex((_, i) => matchAnswers[i] === undefined); setMatchAnswers((answers) => ({ ...answers, [index]: 'unsure' })); }}>Unsure</button><button onClick={() => { const index = matchQuestions.findIndex((_, i) => matchAnswers[i] === undefined); setMatchAnswers((answers) => ({ ...answers, [index]: 'disagree' })); }}>Disagree</button></div></div> : <div className="identity-result"><p className="eyebrow">Your current alignment</p><h4>{identityResult.length > 1 ? 'Your philosophy blend' : 'Your leading philosophy'}</h4><div className="alignment-results">{identityResult.map((name) => <span className="alignment-badge" key={name}>{name}</span>)}</div><p>Based on your responses, these philosophies received your strongest support. This is a reflection tool, not a fixed label.</p><button className="secondary-btn" onClick={() => setMatchAnswers({})}>Retake with a new set of statements</button></div>}</section>
 
-          <section className="content-panel">
-            <section className="panel-section">
-              <div className="section-heading"><h3>Hall of Thinkers</h3></div>
-              <div className="thinker-grid">{philosophers.map((philosopher) => <button key={philosopher.name} className={`thinker-card ${selectedPhilosopher.name === philosopher.name ? 'active' : ''}`} onClick={() => setSelectedPhilosopher(philosopher)}><div className="portrait">{philosopher.name.slice(0, 2).toUpperCase()}</div><span>{philosopher.name}</span></button>)}</div>
-              <div className="thinker-details"><h4>{selectedPhilosopher.name}</h4><p className="subtitle">{selectedPhilosopher.title}</p><p>{selectedPhilosopher.summary}</p><strong>Focus:</strong> <span>{selectedPhilosopher.focus}</span></div>
-            </section>
+        <section className="panel-section cases-section"><div className="section-heading"><p className="eyebrow">Earn Knowledge Crystals</p><h3>The Enchanted Cases</h3><p>Investigate each classroom mystery. Earn 10 Knowledge Crystals for every correct answer.</p></div>{caseIndex < detectiveCases.length ? <article className="case-card"><p className="quiz-score">Case {caseIndex + 1} of {detectiveCases.length} · ✦ {caseScore} crystals</p><h4>{currentCase.title}</h4><p>{currentCase.clue}</p><div className="case-options">{philosophies.map((answer) => <button key={answer} onClick={() => answerCase(answer)}>{answer}</button>)}</div></article> : <div className="completion-card"><h4>Cases closed</h4><p>You earned {caseScore} Knowledge Crystals.</p><button className="secondary-btn" onClick={() => { setCaseIndex(0); setCaseFeedback(''); }}>Investigate again</button></div>}{caseFeedback && <p className="case-feedback" role="status">{caseFeedback}</p>}</section>
 
-            <section className="panel-section escape-section">
-              <div className="section-heading">
-                <h3>The Escape Chambers</h3>
-                <p className="caption">Ten challenges are drawn at random from the Academy’s 30 cases each visit. Solve each chamber to reveal its code word. The code words always follow the same predetermined order.</p>
-              </div>
-              <div className="chamber-list" aria-label="Escape chamber challenges">
-                {escapeRooms.map((room, index) => {
-                  const isUnlocked = index === 0 || solvedEscapeRooms.includes(index - 1);
-                  const isSolved = solvedEscapeRooms.includes(index);
-                  return <button key={`${room.title}-${index}`} className={`chamber-tab ${selectedEscapeRoom === index ? 'active' : ''} ${isSolved ? 'solved' : ''}`} disabled={!isUnlocked} onClick={() => { setSelectedEscapeRoom(index); setEscapeFeedback(''); }}>
-                    <span className="chamber-number">{String(index + 1).padStart(2, '0')}</span><span>{room.title}</span><span className="chamber-status">{isSolved ? '✓ Solved' : isUnlocked ? 'Unlocked' : 'Locked'}</span>
-                  </button>;
-                })}
-              </div>
-              {selectedEscapeRoom < escapeRooms.length && (
-                <article className="escape-challenge">
-                  <p className="eyebrow">Challenge {selectedEscapeRoom + 1} of {escapeRooms.length}</p>
-                  <h4>{escapeRooms[selectedEscapeRoom].title}</h4>
-                  <p className="challenge-clue">{escapeRooms[selectedEscapeRoom].clue}</p>
-                  <h5>Which philosophy unlocks this chamber?</h5>
-                  <div className="case-options">{escapeRooms[selectedEscapeRoom].options.map((option, index) => <button key={option} onClick={() => answerEscapeRoom(option)} disabled={solvedEscapeRooms.includes(selectedEscapeRoom)}><span className="answer-letter">{String.fromCharCode(65 + index)}.</span> {option}</button>)}</div>
-                  {solvedEscapeRooms.includes(selectedEscapeRoom) && <p className="revealed-code" role="status">✦ Code word: <strong>{escapeRooms[selectedEscapeRoom].code}</strong></p>}
-                  {escapeFeedback && <p className="escape-feedback" role="status">{escapeFeedback}</p>}
-                  <p className="escape-score">Chambers solved: {solvedEscapeRooms.length} / {escapeRooms.length}</p>
-                </article>
-              )}
-              {solvedEscapeRooms.length === escapeRooms.length && (
-                <div className="final-escape">
-                  <h4>Final Escape Challenge</h4>
-                  <p>Enter the ten revealed code words in their fixed sequence:</p>
-                  <ol className="collected-codes">{escapeCodeWords.map((code) => <li key={code}>{code}</li>)}</ol>
-                  <form onSubmit={submitFinalCode} className="final-code-form">
-                    <label htmlFor="final-code">Final escape phrase (use arrows or commas between words)</label>
-                    <input id="final-code" value={finalCode} onChange={(event) => setFinalCode(event.target.value)} placeholder="WISDOM → EXPERIENCE → CHOICE → …" disabled={escaped} />
-                    <button className="primary-btn" type="submit" disabled={escaped}>{escaped ? 'Academy Escaped!' : 'Unlock the Final Lock'}</button>
-                  </form>
-                  {escaped && <p className="escape-success" role="status">🏅 Master of Educational Thought unlocked. You escaped the Academy!</p>}
-                </div>
-              )}
-            </section>
-
-            <section className="panel-section quiz-section">
-              <div className="section-heading"><h3>Philosophy Match Challenge</h3></div>
-              {currentQuizIndex < quizQuestions.length ? <div className="quiz-card"><p className="quiz-score">Score: {score} ✦</p><h4>{currentQuestion.question}</h4><div className="quiz-options"><button onClick={() => handleAnswer(currentQuestion.type)}>Yes</button><button onClick={() => handleAnswer('different')}>No</button></div></div> : <div className="completion-card"><h4>Challenge Complete</h4><p>You earned {score} knowledge crystals.</p></div>}
-            </section>
-
-            <section className="panel-section detective-section">
-              <div className="section-heading"><h3>The Enchanted Cases</h3></div>
-              {currentCaseIndex < cases.length ? <div className="case-card"><h4>{cases[currentCaseIndex].title}</h4><p>{cases[currentCaseIndex].clue}</p><div className="case-options">{['perennialism', 'reconstructionism', 'essentialism', 'behaviorism', 'existentialism', 'progressivism'].map((answer) => <button key={answer} onClick={() => handleCaseAnswer(answer)}>{philosophyResults[answer]}</button>)}</div></div> : <div className="completion-card"><h4>Detective Cases Solved</h4><p>Case score: {caseScore} points</p></div>}
-            </section>
-
-            <section className="panel-section sorting-section">
-              <div className="section-heading"><h3>The Sorting Assessment</h3></div>
-              <div className="sorting-grid">
-                <div className="sort-item"><label htmlFor="sort-q1">1. Which matters most in a classroom?</label><select id="sort-q1" value={identityAnswers.q1} onChange={(e) => setIdentityAnswers((prev) => ({ ...prev, q1: e.target.value }))}><option value="">Choose</option><option value="a">A strong common curriculum</option><option value="b">Student voice and experience</option><option value="c">Timeless ideas and big questions</option></select></div>
-                <div className="sort-item"><label htmlFor="sort-q2">2. What should schools help students do?</label><select id="sort-q2" value={identityAnswers.q2} onChange={(e) => setIdentityAnswers((prev) => ({ ...prev, q2: e.target.value }))}><option value="">Choose</option><option value="a">Solve social problems</option><option value="b">Create personal meaning</option><option value="c">Grow through inquiry and experience</option></select></div>
-                <div className="sort-item"><label htmlFor="sort-q3">3. What best supports learning?</label><select id="sort-q3" value={identityAnswers.q3} onChange={(e) => setIdentityAnswers((prev) => ({ ...prev, q3: e.target.value }))}><option value="">Choose</option><option value="a">Clear feedback and rewards</option><option value="b">Structured knowledge and rigor</option><option value="c">Reflection on enduring ideas</option></select></div>
-              </div>
-              {identityResult && <div className="identity-result"><h4>Your educational philosophy alignment:</h4><p>{philosophyResults[identityResult]}</p></div>}
-            </section>
-          </section>
-        </main>
-      )}
-    </div>
-  );
+        <section className="panel-section escape-section"><div className="section-heading"><p className="eyebrow">The last gallery stands between you and freedom</p><h3>The Escape Chambers</h3><p className="caption">Ten challenges are drawn at random from the Academy’s 30 cases each visit. Solve each chamber to reveal its code word. The code words always follow the same predetermined order.</p><p className="parchment-note">📜 Keep your quill and parchment close: record each code word as it is revealed. You will need all ten in their fixed order to open the final lock.</p></div><div className="chamber-list" aria-label="Escape chamber challenges">{escapeRooms.map((room, index) => { const isUnlocked = index === 0 || solvedEscapeRooms.includes(index - 1); const isSolved = solvedEscapeRooms.includes(index); return <button key={`${room.title}-${index}`} className={`chamber-tab ${selectedEscapeRoom === index ? 'active' : ''} ${isSolved ? 'solved' : ''}`} disabled={!isUnlocked} onClick={() => { setSelectedEscapeRoom(index); setEscapeFeedback(''); }}><span className="chamber-number">Chamber {String(index + 1).padStart(2, '0')}</span><span>{room.title}</span><span className="chamber-status">{isSolved ? '✓ Solved' : isUnlocked ? 'Unlocked' : 'Locked'}</span></button>; })}</div><article className="escape-challenge"><p className="eyebrow">Challenge {selectedEscapeRoom + 1} of {escapeRooms.length}</p><h4>{escapeRooms[selectedEscapeRoom].title}</h4><p className="challenge-clue">{escapeRooms[selectedEscapeRoom].clue}</p><h5>Which philosophy unlocks this chamber?</h5><div className="case-options">{escapeRooms[selectedEscapeRoom].options.map((option, index) => <button key={option} onClick={() => answerEscapeRoom(option)} disabled={solvedEscapeRooms.includes(selectedEscapeRoom)}><span className="answer-letter">{String.fromCharCode(65 + index)}.</span> {option}</button>)}</div>{solvedEscapeRooms.includes(selectedEscapeRoom) && <p className="revealed-code" role="status">✦ Record this code: <strong>{escapeRooms[selectedEscapeRoom].code}</strong></p>}{escapeFeedback && <p className="escape-feedback" role="status">{escapeFeedback}</p>}<p className="escape-score">Chambers solved: {solvedEscapeRooms.length} / {escapeRooms.length}</p></article>{solvedEscapeRooms.length === escapeRooms.length && <div className="final-escape"><h4>Final Escape Challenge</h4><p>Enter the ten code words in the fixed sequence shown below.</p><ol className="collected-codes">{escapeCodeWords.map((code) => <li key={code}>{code}</li>)}</ol><form onSubmit={submitFinalCode} className="final-code-form"><label htmlFor="final-code">Final escape phrase (use arrows or commas between words)</label><input id="final-code" value={finalCode} onChange={(event) => setFinalCode(event.target.value)} placeholder="WISDOM → EXPERIENCE → CHOICE → …" disabled={escaped} /><button className="primary-btn" type="submit" disabled={escaped}>{escaped ? 'Academy Escaped!' : 'Unlock the Final Lock'}</button></form>{escaped && <p className="escape-success" role="status">🏅 Master of Educational Thought unlocked. You escaped the Academy!</p>}</div>}</section>
+      </section>
+    </main>}
+  </div>;
 }
 
 export default App;

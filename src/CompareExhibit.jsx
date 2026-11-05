@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './compare-layout.css';
 
 const dimensions = [
   ['beliefs', 'Educational beliefs'],
@@ -27,7 +28,7 @@ export default function CompareExhibit({ philosophers }) {
       <header className="compare-heading">
         <p className="eyebrow">Curator’s Comparison Table</p>
         <h3 id="compare-heading">Compare the Thinkers</h3>
-        <p>Select two or three portraits. Explore documented shared themes in the overlap and distinct approaches in each gallery circle.</p>
+        <p>Select two or three portraits. Explore documented shared themes below the distinct approaches in each gallery portrait.</p>
       </header>
 
       <div className="compare-toolbar">
@@ -59,16 +60,18 @@ export default function CompareExhibit({ philosophers }) {
         </div>
       ) : <>
         <section className={`venn-exhibit venn-count-${selected.length}`} aria-label={`${selected.length}-thinker Venn-style comparison`}>
-          {selected.map((thinker, index) => (
-            <article className={`venn-circle circle-${index + 1}`} key={thinker.id}>
-              <h4>{thinker.name}</h4>
-              <p className="subtitle">{thinker.tradition}</p>
-              <p><strong>{selectedDimension[1]}:</strong> {thinker[activeDimension]}</p>
-            </article>
-          ))}
+          <div className="venn-portraits">
+            {selected.map((thinker, index) => (
+              <article className={`venn-circle circle-${index + 1}`} key={thinker.id}>
+                <h4>{thinker.name}</h4>
+                <p className="subtitle">{thinker.tradition}</p>
+                <p><strong>{selectedDimension[1]}:</strong> {thinker[activeDimension]}</p>
+              </article>
+            ))}
+          </div>
           <aside className="venn-overlap" aria-label="Themes shared by every selected thinker">
-            <span className="overlap-label">Shared ground</span>
-            {sharedThemes.length ? <ul>{sharedThemes.map((theme) => <li key={theme}>{theme}</li>)}</ul> : <p>No tagged themes are shared by every selected thinker. Compare the distinct approaches in each circle.</p>}
+            <span className="overlap-label">Shared Ground</span>
+            {sharedThemes.length ? <ul>{sharedThemes.map((theme) => <li key={theme}>{theme}</li>)}</ul> : <p>No tagged themes are shared by every selected thinker. Compare the distinct approaches above.</p>}
           </aside>
         </section>
 
@@ -90,7 +93,7 @@ export default function CompareExhibit({ philosophers }) {
             </tbody>
           </table>
         </div>
-        <p className="comparison-note">Shared ground lists only documented theme tags present in every selected profile; other similarities may still be worth discussing.</p>
+        <p className="comparison-note">Shared ground lists documented theme tags present in every selected profile; other similarities may still be worth discussing.</p>
       </>}
     </div>
   );

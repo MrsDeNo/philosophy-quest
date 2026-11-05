@@ -1,1 +1,1 @@
-Upload contents to GitHub Pages root.
+Upload files to GitHub Pages repository root.

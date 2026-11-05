@@ -1,1 +1,1 @@
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.add("hidden"));document.getElementById(b.dataset.tab).classList.remove("hidden")});
+function showTab(id){document.querySelectorAll(".tab").forEach(t=>t.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}

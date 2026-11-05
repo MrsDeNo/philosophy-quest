@@ -1,1 +1,1 @@
-Production Package 1: Philosopher Academy. Upload contents to repository root or subfolder.
+Upload contents to GitHub Pages root.

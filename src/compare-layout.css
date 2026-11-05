@@ -1,92 +1,24 @@
-/* Keep each thinker's contrast readable; shared ground sits below, never over the text. */
-.venn-exhibit {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 18px;
-  min-height: 0 !important;
-  margin: 22px 0;
-  padding: 0 !important;
-}
-.venn-portraits {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  align-items: stretch;
-}
-.venn-count-3 .venn-portraits {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
+/* Comparison table layout; no diagram overlay so contrast text stays unobscured. */
+.venn-exhibit,
+.venn-portraits,
 .venn-circle,
-.venn-count-3 .venn-circle {
-  position: relative !important;
-  inset: auto !important;
-  transform: none !important;
-  width: auto !important;
-  min-width: 0;
-  min-height: 245px;
-  margin: 0 !important;
-  padding: clamp(20px, 2.4vw, 32px) !important;
-  overflow-wrap: anywhere;
-  border-radius: 48% / 42%;
-}
-.venn-count-3 .venn-circle {
-  min-height: 280px;
-  border-radius: 46% / 38%;
-}
-.venn-circle h4 { overflow-wrap: anywhere; }
-.venn-circle p { max-width: 100%; }
-.venn-overlap,
-.venn-count-3 .venn-overlap {
-  position: relative !important;
-  inset: auto !important;
-  transform: none !important;
-  width: 100% !important;
-  max-width: none;
-  max-height: none !important;
-  overflow: visible;
-  grid-column: 1 / -1;
-  padding: 18px 22px;
-  text-align: left;
-  border: 2px solid #e7c56e;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(91, 67, 33, .72), rgba(23, 19, 31, .98));
-  color: #fff8e6;
-  box-shadow: inset 0 0 18px rgba(245, 215, 119, .08), 0 6px 20px rgba(0, 0, 0, .28);
-}
-.venn-overlap .overlap-label {
-  font-size: 1.05rem;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-}
-.venn-overlap ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
-}
-.venn-overlap li {
-  margin: 0;
-  padding: .45rem .75rem;
-  border: 1px solid rgba(245, 215, 119, .48);
-  border-radius: 999px;
-  background: rgba(245, 215, 119, .12);
-  color: #fff2ca;
-  font-size: .92rem;
-  line-height: 1.4;
-}
-.venn-overlap p { margin: 8px 0 0; line-height: 1.6; }
-@media (max-width: 900px) {
-  .venn-count-3 .venn-portraits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .venn-count-3 .venn-circle:last-child { grid-column: 1 / -1; width: min(100%, 520px) !important; justify-self: center; }
-}
+.venn-overlap { display: none !important; }
+.dimension-tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 2px 12px; }
+.dimension-tabs button { flex: 0 0 auto; padding: .65rem .9rem; border: 1px solid rgba(214, 200, 255, .4); border-radius: 999px; background: rgba(16, 13, 25, .82); color: #fff8e6; }
+.dimension-tabs button.active { background: rgba(190, 145, 62, .35); color: #fff0bd; border-color: #e5bf68; }
+.comparison-table-wrap { overflow-x: auto; border: 1px solid rgba(211, 170, 91, .55); border-radius: 10px; background: rgba(17, 14, 23, .86); }
+.comparison-table { width: 100%; min-width: 620px; border-collapse: collapse; line-height: 1.55; }
+.comparison-table caption { padding: 14px; text-align: left; color: #ffe39a; font-family: 'Cinzel', serif; font-weight: 700; }
+.comparison-table th, .comparison-table td { padding: 13px 15px; text-align: left; vertical-align: top; border-top: 1px solid rgba(214, 200, 255, .2); border-right: 1px solid rgba(214, 200, 255, .16); }
+.comparison-table thead th { color: #fff0bd; background: rgba(120, 88, 42, .35); }
+.comparison-table tbody th { width: 175px; color: #f3e5c4; }
+.shared-theme-panel { margin-top: 18px; padding: 18px 22px; border: 2px solid #e7c56e; border-radius: 14px; background: linear-gradient(135deg, rgba(91, 67, 33, .72), rgba(23, 19, 31, .98)); color: #fff8e6; }
+.shared-theme-panel h4 { margin: 0; color: #ffe39a; font-family: 'Cinzel', serif; letter-spacing: .04em; }
+.shared-theme-panel ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 12px 0 0; }
+.shared-theme-panel li { padding: .45rem .75rem; border: 1px solid rgba(245, 215, 119, .48); border-radius: 999px; background: rgba(245, 215, 119, .12); color: #fff2ca; line-height: 1.4; }
+.shared-theme-panel p { margin: 10px 0 0; line-height: 1.6; }
+.comparison-table-wrap:focus-visible { outline: 3px solid #ffe39a; outline-offset: 3px; }
 @media (max-width: 600px) {
-  .venn-portraits,
-  .venn-count-3 .venn-portraits { grid-template-columns: minmax(0, 1fr); }
-  .venn-circle,
-  .venn-count-3 .venn-circle,
-  .venn-count-3 .venn-circle:last-child { grid-column: auto; width: 100% !important; min-height: 0; border-radius: 18px; }
-  .venn-overlap,
-  .venn-count-3 .venn-overlap { padding: 16px; }
+  .comparison-table-wrap { max-width: 100%; }
+  .comparison-table { min-width: 560px; }
 }

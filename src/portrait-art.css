@@ -1,0 +1,23 @@
+/* Portrait gallery paintings clipped to the existing circular initials badges. */
+.thinker-grid .thinker-card .portrait {
+  display: block;
+  overflow: hidden;
+  color: transparent;
+  font-size: 0;
+  text-indent: -9999px;
+  background-color: #31233f;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 2px solid rgba(245, 215, 119, .82);
+  box-shadow: 0 0 0 3px rgba(20, 15, 28, .9), 0 0 18px rgba(245, 215, 119, .18);
+}
+.thinker-grid .thinker-card:nth-child(1) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Plato_Silanion_Musei_Capitolini_MC1377.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(2) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Aristotle_Altemps_Inv8575.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(3) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/John_Locke_by_Godfrey_Kneller.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(4) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Jacques_Rousseau_(painted_portrait).jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(5) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Maria_Montessori_1913.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(6) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/John_Dewey_in_1902.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(7) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Paulo_Freire.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(8) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Nel_Noddings.jpg?width=180'); }
+.thinker-grid .thinker-card:nth-child(9) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/George_S._Counts.jpg?width=180'); }

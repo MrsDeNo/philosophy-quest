@@ -14,7 +14,7 @@ export default function CompareExhibit({ philosophers }) {
   const selected = selectedIds.map((id) => philosophers.find((thinker) => thinker.id === id)).filter(Boolean);
   const selectedDimension = dimensions.find(([key]) => key === activeDimension) ?? dimensions[0];
   const sharedThemes = selected.length > 1
-    ? selected[0].themes.filter((theme) => selected.every((thinker) => thinker.themes.includes(theme)))
+    ? (selected[0].themes ?? []).filter((theme) => selected.every((thinker) => (thinker.themes ?? []).includes(theme)))
     : [];
 
   const toggle = (id) => {
@@ -28,7 +28,7 @@ export default function CompareExhibit({ philosophers }) {
       <header className="compare-heading">
         <p className="eyebrow">Curator’s Comparison Table</p>
         <h3 id="compare-heading">Compare the Thinkers</h3>
-        <p>Select two or three portraits. Explore documented shared themes below the distinct approaches in each gallery portrait.</p>
+        <p>Select two or three thinkers. Compare their approaches side by side, then review themes they explicitly share.</p>
       </header>
 
       <div className="compare-toolbar">
@@ -56,25 +56,9 @@ export default function CompareExhibit({ philosophers }) {
       {selected.length < 2 ? (
         <div className="compare-empty" role="status">
           <span aria-hidden="true">◎</span>
-          <p>Choose {selected.length === 0 ? 'two or three thinkers' : 'one more thinker'} to open the comparison exhibit.</p>
+          <p>Choose {selected.length === 0 ? 'two or three thinkers' : 'one more thinker'} to open the comparison table.</p>
         </div>
       ) : <>
-        <section className={`venn-exhibit venn-count-${selected.length}`} aria-label={`${selected.length}-thinker Venn-style comparison`}>
-          <div className="venn-portraits">
-            {selected.map((thinker, index) => (
-              <article className={`venn-circle circle-${index + 1}`} key={thinker.id}>
-                <h4>{thinker.name}</h4>
-                <p className="subtitle">{thinker.tradition}</p>
-                <p><strong>{selectedDimension[1]}:</strong> {thinker[activeDimension]}</p>
-              </article>
-            ))}
-          </div>
-          <aside className="venn-overlap" aria-label="Themes shared by every selected thinker">
-            <span className="overlap-label">Shared Ground</span>
-            {sharedThemes.length ? <ul>{sharedThemes.map((theme) => <li key={theme}>{theme}</li>)}</ul> : <p>No tagged themes are shared by every selected thinker. Compare the distinct approaches above.</p>}
-          </aside>
-        </section>
-
         <div className="dimension-tabs" role="group" aria-label="Choose comparison dimension">
           {dimensions.map(([key, label]) => (
             <button key={key} type="button" aria-pressed={activeDimension === key} className={activeDimension === key ? 'active' : ''} onClick={() => setActiveDimension(key)}>{label}</button>
@@ -93,6 +77,11 @@ export default function CompareExhibit({ philosophers }) {
             </tbody>
           </table>
         </div>
+
+        <section className="shared-theme-panel" aria-labelledby="shared-themes-heading">
+          <h4 id="shared-themes-heading">Shared Ground</h4>
+          {sharedThemes.length ? <ul>{sharedThemes.map((theme) => <li key={theme}>{theme}</li>)}</ul> : <p>No documented theme tags are shared by every selected thinker. Use the comparison table to explore their differences.</p>}
+        </section>
         <p className="comparison-note">Shared ground lists documented theme tags present in every selected profile; other similarities may still be worth discussing.</p>
       </>}
     </div>

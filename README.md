@@ -1,1 +1,2 @@
-Upload files to GitHub Pages repository root.
+# Philosophy Quest
+Upload contents to GitHub Pages.

@@ -1,1 +1,1 @@
-function showTab(id){document.querySelectorAll(".tab").forEach(t=>t.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function show(id){document.querySelectorAll("section").forEach(s=>s.style.display="none");document.getElementById(id).style.display="block";}

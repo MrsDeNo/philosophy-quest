@@ -107,8 +107,8 @@ function App() {
   }, [matchAnswers, matchQuestions]);
   const answeredCount = Object.keys(matchAnswers).length;
   const identityResult = answeredCount === matchQuestions.length ? Object.entries(identityScores).sort((a, b) => b[1] - a[1]).filter((entry) => entry[1] === Math.max(...Object.values(identityScores))).map(([name]) => name) : [];
-  const completedActivities = [enteredAcademy, profilesViewed.length >= philosophers.length, answeredCount === matchQuestions.length, caseIndex >= sessionCases.length, escaped].filter(Boolean).length;
-  const progress = Math.round(completedActivities / 5 * 100);
+  const completedActivities = [profilesViewed.length >= philosophers.length, answeredCount === matchQuestions.length, caseIndex >= sessionCases.length, escaped].filter(Boolean).length;
+  const progress = Math.round(completedActivities / 4 * 100);
   const currentCase = sessionCases[caseIndex];
   const finalEscapePhrase = escapeCodeWords.join(' → ');
   const compareProfiles = selectedCompare.map((id) => philosophers.find((item) => item.id === id)).filter(Boolean);
@@ -124,7 +124,7 @@ function App() {
   const startNewCaseSession = () => { setSessionCases(makeCaseSession()); setCaseIndex(0); setCaseScore(0); setCaseFeedback(''); };
   const answerEscapeRoom = (answer) => { const room = escapeRooms[selectedEscapeRoom]; if (answer !== room.answer) { setEscapeFeedback('Not quite—study the clue and try again. The next chamber remains locked.'); return; } setSolvedEscapeRooms((previous) => previous.includes(selectedEscapeRoom) ? previous : [...previous, selectedEscapeRoom]); setEscapeFeedback(`Correct! Record this code on your quill and parchment: ${room.code}`); };
   const submitFinalCode = (event) => { event.preventDefault(); const submitted = finalCode.trim().toUpperCase().replace(/\s*(?:→|,)\s*/g, ' → '); if (submitted === finalEscapePhrase) { setEscaped(true); setEscapeFeedback('The final lock opens! You have escaped the Academy.'); } else setEscapeFeedback('That sequence does not match. Arrange the ten recorded codes in the predetermined order and try again.'); };
-  const unlockedBadges = badges.filter((_, index) => [enteredAcademy, caseIndex >= sessionCases.length && caseScore > 0, escaped, answeredCount === matchQuestions.length, profilesViewed.length > 0, escaped][index]);
+  const unlockedBadges = badges.filter((_, index) => [profilesViewed.length >= philosophers.length, caseIndex >= sessionCases.length && caseScore > 0, escaped, answeredCount === matchQuestions.length, profilesViewed.length > 0, escaped][index]);
 
   return <div className="app-shell">
     <header className="topbar"><div className="crest">✦</div><div className="brand"><p className="eyebrow">A Museum of Educational Thought</p><h1>The Philosophy Quest</h1></div><button className="pill-btn" onClick={() => setEnteredAcademy(true)}>{enteredAcademy ? 'Academy Entered' : 'Enter the Academy'}</button></header>

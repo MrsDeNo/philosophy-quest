@@ -1,0 +1,1 @@
+let xp=Number(localStorage.getItem("pq_xp")||0);document.getElementById("xp").textContent=xp;function earn(v){xp+=v;localStorage.setItem("pq_xp",xp);document.getElementById("xp").textContent=xp;}

@@ -12,18 +12,57 @@ const philosophers = [
   { name: 'Counts', title: 'The Architect of Social Change', summary: 'George Counts pushed schools to help students confront social problems and build a better world.', focus: 'Democracy, justice, and societal improvement.' },
 ];
 
-const escapeRooms = [
-  { title: 'The Library of Eternal Truths', clue: 'Students should study the greatest works of civilization because truth is timeless and unchanging.', options: ['Progressivism', 'Essentialism', 'Perennialism', 'Existentialism'], answer: 'Perennialism', code: 'WISDOM' },
-  { title: 'The Hall of Experience', clue: 'Students learn best when they investigate problems, collaborate, and learn by doing.', options: ['Progressivism', 'Essentialism', 'Behaviorism', 'Perennialism'], answer: 'Progressivism', code: 'EXPERIENCE' },
-  { title: 'The Chamber of Freedom', clue: '“I want to choose my own learning path and determine what gives my life meaning.”', options: ['Reconstructionism', 'Perennialism', 'Existentialism', 'Essentialism'], answer: 'Existentialism', code: 'CHOICE' },
-  { title: 'The Vault of Core Knowledge', clue: 'Schools must ensure every student masters essential academic content and foundational skills.', options: ['Essentialism', 'Progressivism', 'Existentialism', 'Behaviorism'], answer: 'Essentialism', code: 'FOUNDATION' },
-  { title: 'The Laboratory of Conditioning', clue: 'A teacher rewards students with tokens for desired behaviors. Students can exchange tokens for privileges.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Behaviorism', code: 'REINFORCEMENT' },
-  { title: 'The Civic Action Center', clue: 'Students research homelessness and design solutions to improve their community.', options: ['Essentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Reconstructionism', code: 'TRANSFORM' },
-  { title: 'Montessori’s Secret Garden', clue: 'Students independently select materials, work at their own pace, and learn through exploration.', options: ['Essentialism', 'Behaviorism', 'Progressivism', 'Perennialism'], answer: 'Progressivism', code: 'DISCOVERY' },
-  { title: 'The Great Books Gallery', clue: 'Students discuss Plato, Aristotle, Shakespeare, and other classic authors to understand enduring human questions.', options: ['Existentialism', 'Behaviorism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism', code: 'TRUTH' },
-  { title: 'The Reflection Chamber', clue: 'Students write journals exploring questions such as “Who am I?” and “What kind of person do I want to become?”', options: ['Essentialism', 'Progressivism', 'Behaviorism', 'Existentialism'], answer: 'Existentialism', code: 'AUTHENTICITY' },
-  { title: 'The Final Academy Lock', clue: 'The purpose of education is to create a more just and equitable society.', options: ['Essentialism', 'Perennialism', 'Reconstructionism', 'Behaviorism'], answer: 'Reconstructionism', code: 'JUSTICE' },
+// The code word at each chamber position is fixed. The challenge shown in that
+// position is randomly selected at page load, independently of its code word.
+const escapeCodeWords = [
+  'WISDOM', 'EXPERIENCE', 'CHOICE', 'FOUNDATION', 'REINFORCEMENT',
+  'TRANSFORM', 'DISCOVERY', 'TRUTH', 'AUTHENTICITY', 'JUSTICE',
 ];
+
+const challengeBank = [
+  { title: 'The Library of Eternal Truths', clue: 'Students should study the greatest works of civilization because truth is timeless and unchanging.', options: ['Progressivism', 'Essentialism', 'Perennialism', 'Existentialism'], answer: 'Perennialism' },
+  { title: 'The Hall of Experience', clue: 'Students learn best when they investigate problems, collaborate, and learn by doing.', options: ['Progressivism', 'Essentialism', 'Behaviorism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Chamber of Freedom', clue: 'A student says, “I want to choose my own learning path and determine what gives my life meaning.”', options: ['Reconstructionism', 'Perennialism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
+  { title: 'The Vault of Core Knowledge', clue: 'An old principal declares that schools must ensure every student masters essential academic content and foundational skills.', options: ['Essentialism', 'Progressivism', 'Existentialism', 'Behaviorism'], answer: 'Essentialism' },
+  { title: 'The Laboratory of Conditioning', clue: 'A teacher rewards students with tokens for desired behaviors. Students can exchange tokens for privileges.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Behaviorism' },
+  { title: 'The Civic Action Center', clue: 'Students research homelessness and design solutions to improve their community.', options: ['Essentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Reconstructionism' },
+  { title: 'Montessori’s Secret Garden', clue: 'Students independently select materials, work at their own pace, and learn through exploration.', options: ['Essentialism', 'Behaviorism', 'Progressivism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Great Books Gallery', clue: 'Students discuss Plato, Aristotle, Shakespeare, and other classic authors to understand enduring human questions.', options: ['Existentialism', 'Behaviorism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism' },
+  { title: 'The Reflection Chamber', clue: 'Students write journals exploring questions such as “Who am I?” and “What kind of person do I want to become?”', options: ['Essentialism', 'Progressivism', 'Behaviorism', 'Existentialism'], answer: 'Existentialism' },
+  { title: 'The Final Academy Lock', clue: 'The purpose of education is to create a more just and equitable society.', options: ['Essentialism', 'Perennialism', 'Reconstructionism', 'Behaviorism'], answer: 'Reconstructionism' },
+  { title: 'The Socratic Portrait Room', clue: 'Learners examine enduring questions about justice and virtue by discussing classic texts across generations.', options: ['Behaviorism', 'Progressivism', 'Perennialism', 'Reconstructionism'], answer: 'Perennialism' },
+  { title: 'The Workshop of Invention', clue: 'Teams design, test, and improve a bridge, using each attempt as a chance to learn from experience.', options: ['Progressivism', 'Essentialism', 'Existentialism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Academy’s Core Curriculum', clue: 'Every student follows a carefully sequenced program in literacy, mathematics, science, and history.', options: ['Reconstructionism', 'Essentialism', 'Progressivism', 'Behaviorism'], answer: 'Essentialism' },
+  { title: 'The Chamber of Chosen Paths', clue: 'Students choose a topic that matters to them and explain how their project expresses their own values and purpose.', options: ['Perennialism', 'Behaviorism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
+  { title: 'The Community Inquiry Room', clue: 'A class studies unequal access to fresh food and works with neighbors on community-led solutions.', options: ['Essentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Reconstructionism' },
+  { title: 'The Bell of Positive Practice', clue: 'A teacher gives immediate praise and a class privilege when learners demonstrate a clearly defined routine.', options: ['Existentialism', 'Progressivism', 'Behaviorism', 'Perennialism'], answer: 'Behaviorism' },
+  { title: 'The Fieldwork Conservatory', clue: 'Learners follow questions raised during a nature walk, gather evidence, and share what they discover.', options: ['Perennialism', 'Progressivism', 'Essentialism', 'Behaviorism'], answer: 'Progressivism' },
+  { title: 'The Gallery of Great Ideas', clue: 'Students compare classic works to explore questions about human nature that remain important in every era.', options: ['Reconstructionism', 'Behaviorism', 'Perennialism', 'Existentialism'], answer: 'Perennialism' },
+  { title: 'The Foundational Skills Forge', clue: 'The teacher explicitly models essential reading and arithmetic skills, then guides students through structured practice.', options: ['Essentialism', 'Progressivism', 'Reconstructionism', 'Existentialism'], answer: 'Essentialism' },
+  { title: 'The Journal of Becoming', clue: 'Learners reflect on personal choices and decide what kind of people they hope to become.', options: ['Behaviorism', 'Perennialism', 'Existentialism', 'Essentialism'], answer: 'Existentialism' },
+  { title: 'The Justice Campaign Hall', clue: 'Students investigate barriers to accessibility at school and present an advocacy plan to decision-makers.', options: ['Progressivism', 'Reconstructionism', 'Behaviorism', 'Perennialism'], answer: 'Reconstructionism' },
+  { title: 'The Token Keeper’s Study', clue: 'Students earn tokens for specific observable actions and exchange them for classroom privileges.', options: ['Behaviorism', 'Existentialism', 'Perennialism', 'Progressivism'], answer: 'Behaviorism' },
+  { title: 'The Collaborative Problem Lab', clue: 'A teacher builds a unit around a real question from students, who investigate it together and learn through the process.', options: ['Essentialism', 'Behaviorism', 'Progressivism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Hall of Essential Lessons', clue: 'Students are expected to master a shared body of academic knowledge and foundational skills before advancing.', options: ['Existentialism', 'Essentialism', 'Reconstructionism', 'Progressivism'], answer: 'Essentialism' },
+  { title: 'The Compass of Identity', clue: 'Students consider different possible futures and make authentic choices about the direction of their learning.', options: ['Perennialism', 'Behaviorism', 'Reconstructionism', 'Existentialism'], answer: 'Existentialism' },
+  { title: 'The Ancient Questions Alcove', clue: 'A seminar uses enduring literature to consider truth, goodness, and the questions shared across human history.', options: ['Perennialism', 'Progressivism', 'Behaviorism', 'Essentialism'], answer: 'Perennialism' },
+  { title: 'The Practice and Praise Chamber', clue: 'Learners receive consistent feedback and a small reward after demonstrating a target behavior.', options: ['Reconstructionism', 'Behaviorism', 'Existentialism', 'Perennialism'], answer: 'Behaviorism' },
+  { title: 'The Neighborhood Forum', clue: 'Students and community members discuss a local problem and plan collective action for change.', options: ['Essentialism', 'Perennialism', 'Reconstructionism', 'Behaviorism'], answer: 'Reconstructionism' },
+  { title: 'The Garden of Guided Discovery', clue: 'Children select hands-on materials, explore at their own pace, and build understanding through purposeful activity.', options: ['Progressivism', 'Behaviorism', 'Essentialism', 'Perennialism'], answer: 'Progressivism' },
+  { title: 'The Lantern of Timeless Wisdom', clue: 'Students study enduring philosophical and literary works to seek ideas that transcend a particular time or place.', options: ['Existentialism', 'Reconstructionism', 'Perennialism', 'Behaviorism'], answer: 'Perennialism' },
+];
+
+function shuffleAndAssignCodes(challenges) {
+  const shuffled = [...challenges];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled.slice(0, 10).map((challenge, index) => ({
+    ...challenge,
+    code: escapeCodeWords[index],
+  }));
+}
 
 const quizQuestions = [
   { question: 'Students should master a common core of knowledge.', type: 'essentialism' },
@@ -50,9 +89,10 @@ const cases = [
 ];
 
 const badges = ['Thinker Explorer', 'Philosophy Detective', 'Escape Survivor', 'Inventory Master', 'Reflection Scholar', 'Master of Educational Thought'];
-const finalEscapePhrase = escapeRooms.map((room) => room.code).join(' → ');
+const finalEscapePhrase = escapeCodeWords.join(' → ');
 
 function App() {
+  const [escapeRooms] = useState(shuffleAndAssignCodes);
   const [selectedPhilosopher, setSelectedPhilosopher] = useState(philosophers[0]);
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -85,7 +125,7 @@ function App() {
   const progress = useMemo(() => {
     const completed = [enteredAcademy, currentQuizIndex >= quizQuestions.length, currentCaseIndex >= cases.length, !!identityResult, solvedEscapeRooms.length === escapeRooms.length, escaped].filter(Boolean).length;
     return Math.round((completed / 6) * 100);
-  }, [enteredAcademy, currentQuizIndex, currentCaseIndex, identityResult, solvedEscapeRooms.length, escaped]);
+  }, [enteredAcademy, currentQuizIndex, currentCaseIndex, identityResult, solvedEscapeRooms.length, escapeRooms.length, escaped]);
 
   const handleAnswer = (answerType) => {
     if (answerType === currentQuestion.type) setScore((prev) => prev + 10);
@@ -115,7 +155,7 @@ function App() {
       setEscaped(true);
       setEscapeFeedback('The final lock opens! You have escaped the Academy and earned the Master of Educational Thought badge.');
     } else {
-      setEscapeFeedback('The sequence does not match the collected codes. Arrange all ten code words in room order and try again.');
+      setEscapeFeedback('The sequence does not match the collected codes. Arrange all ten code words in the predetermined order and try again.');
     }
   };
 
@@ -164,12 +204,15 @@ function App() {
             </section>
 
             <section className="panel-section escape-section">
-              <div className="section-heading"><h3>The Escape Chambers</h3><p className="caption">Identify the educational philosophy in each chamber to reveal its code word and unlock the next challenge.</p></div>
+              <div className="section-heading">
+                <h3>The Escape Chambers</h3>
+                <p className="caption">Ten challenges are drawn at random from the Academy’s 30 cases each visit. Solve each chamber to reveal its code word. The code words always follow the same predetermined order.</p>
+              </div>
               <div className="chamber-list" aria-label="Escape chamber challenges">
                 {escapeRooms.map((room, index) => {
                   const isUnlocked = index === 0 || solvedEscapeRooms.includes(index - 1);
                   const isSolved = solvedEscapeRooms.includes(index);
-                  return <button key={room.title} className={`chamber-tab ${selectedEscapeRoom === index ? 'active' : ''} ${isSolved ? 'solved' : ''}`} disabled={!isUnlocked} onClick={() => { setSelectedEscapeRoom(index); setEscapeFeedback(''); }}>
+                  return <button key={`${room.title}-${index}`} className={`chamber-tab ${selectedEscapeRoom === index ? 'active' : ''} ${isSolved ? 'solved' : ''}`} disabled={!isUnlocked} onClick={() => { setSelectedEscapeRoom(index); setEscapeFeedback(''); }}>
                     <span className="chamber-number">{String(index + 1).padStart(2, '0')}</span><span>{room.title}</span><span className="chamber-status">{isSolved ? '✓ Solved' : isUnlocked ? 'Unlocked' : 'Locked'}</span>
                   </button>;
                 })}
@@ -189,8 +232,8 @@ function App() {
               {solvedEscapeRooms.length === escapeRooms.length && (
                 <div className="final-escape">
                   <h4>Final Escape Challenge</h4>
-                  <p>Collect and enter all ten code words in the sequence of rooms visited throughout the semester.</p>
-                  <ol className="collected-codes">{escapeRooms.map((room) => <li key={room.code}>{room.code}</li>)}</ol>
+                  <p>Enter the ten revealed code words in their fixed sequence:</p>
+                  <ol className="collected-codes">{escapeCodeWords.map((code) => <li key={code}>{code}</li>)}</ol>
                   <form onSubmit={submitFinalCode} className="final-code-form">
                     <label htmlFor="final-code">Final escape phrase (use arrows or commas between words)</label>
                     <input id="final-code" value={finalCode} onChange={(event) => setFinalCode(event.target.value)} placeholder="WISDOM → EXPERIENCE → CHOICE → …" disabled={escaped} />

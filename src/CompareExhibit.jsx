@@ -8,14 +8,28 @@ const dimensions = [
   ['contributions', 'Contributions'],
 ];
 
+const alignedPhilosophies = {
+  plato: 'Perennialism',
+  aristotle: 'Perennialism',
+  'john-locke': 'Essentialism',
+  'jean-jacques-rousseau': 'Existentialism',
+  'maria-montessori': 'Progressivism',
+  'john-dewey': 'Progressivism',
+  'paulo-freire': 'Reconstructionism',
+  'nel-noddings': 'Progressivism',
+  'george-s-counts': 'Reconstructionism',
+};
+
 export default function CompareExhibit({ philosophers }) {
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeDimension, setActiveDimension] = useState('beliefs');
   const selected = selectedIds.map((id) => philosophers.find((thinker) => thinker.id === id)).filter(Boolean);
   const selectedDimension = dimensions.find(([key]) => key === activeDimension) ?? dimensions[0];
+  const alphabeticalThinkers = [...philosophers].sort((a, b) => a.name.localeCompare(b.name));
   const sharedThemes = selected.length > 1
     ? (selected[0].themes ?? []).filter((theme) => selected.every((thinker) => (thinker.themes ?? []).includes(theme)))
     : [];
+  const philosophyFor = (thinker) => thinker.primaryPhilosophy ?? alignedPhilosophies[thinker.id] ?? 'Progressivism';
 
   const toggle = (id) => {
     setSelectedIds((current) => current.includes(id)
@@ -28,7 +42,7 @@ export default function CompareExhibit({ philosophers }) {
       <header className="compare-heading">
         <p className="eyebrow">Curator’s Comparison Table</p>
         <h3 id="compare-heading">Compare the Thinkers</h3>
-        <p>Select two or three thinkers. Compare their approaches side by side, then review themes they explicitly share.</p>
+        <p>Select two or three thinkers. Compare their educational philosophies, approaches, and documented shared themes.</p>
       </header>
 
       <div className="compare-toolbar">
@@ -37,7 +51,7 @@ export default function CompareExhibit({ philosophers }) {
       </div>
 
       <div className="compare-picker" role="group" aria-label="Choose up to three philosophers to compare">
-        {philosophers.map((thinker) => {
+        {alphabeticalThinkers.map((thinker) => {
           const checked = selectedIds.includes(thinker.id);
           const checkboxId = `compare-thinker-${thinker.id}`;
           return (
@@ -45,7 +59,7 @@ export default function CompareExhibit({ philosophers }) {
               <input id={checkboxId} type="checkbox" checked={checked} disabled={!checked && selected.length === 3} onChange={() => toggle(thinker.id)} />
               <label htmlFor={checkboxId}>
                 <span className="portrait compare-portrait" aria-hidden="true">{thinker.name.slice(0, 2).toUpperCase()}</span>
-                <span>{thinker.name}</span>
+                <span className="compare-thinker-name">{thinker.name}</span>
               </label>
               {checked && <span className="selected-label" aria-hidden="true">Selected</span>}
             </div>
@@ -70,7 +84,8 @@ export default function CompareExhibit({ philosophers }) {
             <caption>Thinker-by-thinker comparison · {selectedDimension[1]}</caption>
             <thead><tr><th scope="col">Comparison point</th>{selected.map((thinker) => <th scope="col" key={thinker.id}>{thinker.name}</th>)}</tr></thead>
             <tbody>
-              <tr><th scope="row">Philosophical tradition</th>{selected.map((thinker) => <td key={thinker.id}>{thinker.tradition}</td>)}</tr>
+              <tr><th scope="row">Primary educational philosophy</th>{selected.map((thinker) => <td key={thinker.id}>{philosophyFor(thinker)}</td>)}</tr>
+              <tr><th scope="row">Educational beliefs</th>{selected.map((thinker) => <td key={thinker.id}>{thinker.beliefs}</td>)}</tr>
               <tr><th scope="row">{selectedDimension[1]}</th>{selected.map((thinker) => <td key={thinker.id}>{thinker[activeDimension]}</td>)}</tr>
               <tr><th scope="row">Classroom connection</th>{selected.map((thinker) => <td key={thinker.id}>{thinker.classroom}</td>)}</tr>
               <tr><th scope="row">Contributions</th>{selected.map((thinker) => <td key={thinker.id}>{thinker.contributions}</td>)}</tr>

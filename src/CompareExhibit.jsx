@@ -88,6 +88,9 @@ export default function CompareExhibit({ philosophers }) {
           {sharedThemes.length ? <ul>{sharedThemes.map((theme) => <li key={theme}>{theme}</li>)}</ul> : <p>No documented theme tags are shared by every selected thinker. Use the comparison table to explore their differences.</p>}
         </section>
         <p className="comparison-note">Reflection: Which difference between these thinkers would most change what students experience in a classroom? What makes you say so?</p>
+        <aside className="curator-note" aria-label="Curator’s note">
+          <p><strong>Curator’s note:</strong> Treat these alignments as starting points, not verdicts. Educational traditions overlap; compare each thinker’s ideas with the classroom context before deciding which label fits best.</p>
+        </aside>
       </>}
     </div>
   );

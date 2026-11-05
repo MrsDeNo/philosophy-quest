@@ -1,3 +1,6 @@
-/* The reflection prompt invites discussion without implying a single correct response. */
-.reflection-prompt { margin: 16px 0 0; padding: 14px 16px; border-left: 3px solid #7ce4d6; border-radius: 0 10px 10px 0; background: rgba(124, 228, 214, .09); color: #f7f0dc; line-height: 1.6; }
-.reflection-prompt strong { color: #b7fff2; }
+/* Concise alignment note on the thinker profile card. */
+.profile-alignment-note { display: inline-block; margin: 0 0 14px; padding: .3rem .6rem; border: 1px solid rgba(245, 215, 119, .48); border-radius: 999px; background: rgba(245, 215, 119, .1); color: #ffe6a4; font-size: .82rem; font-weight: 700; }
+.alignment-caveat { margin: 14px 0; padding: 12px 14px; border-left: 3px solid #e7c56e; background: rgba(231, 197, 110, .09); color: rgba(247, 240, 220, .92); line-height: 1.55; }
+.curator-note { margin-top: 16px; padding: 14px 16px; border: 1px solid rgba(214, 200, 255, .26); border-radius: 10px; background: rgba(23, 19, 31, .75); color: rgba(247, 240, 220, .9); line-height: 1.6; }
+.curator-note p { margin: 0; }
+.curator-note strong { color: #d6c8ff; }

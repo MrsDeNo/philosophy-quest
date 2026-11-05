@@ -75,14 +75,17 @@ function App() {
       q2: { a: 'reconstructionism', b: 'existentialism', c: 'progressivism' },
       q3: { a: 'behaviorism', b: 'essentialism', c: 'perennialism' },
     };
-    Object.entries(answerMap).forEach(([key, value]) => { weighted[value[identityAnswers[key]] += 1; });
+    Object.entries(answerMap).forEach(([key, value]) => {
+      const philosophy = value[identityAnswers[key]];
+      if (philosophy) weighted[philosophy] += 1;
+    });
     return Object.entries(weighted).sort((a, b) => b[1] - a[1])[0][0];
   }, [identityAnswers]);
 
   const progress = useMemo(() => {
-    const completed = [enteredAcademy, currentQuizIndex >= quizQuestions.length, currentCaseIndex >= cases.length, !!identityResult, escaped].filter(Boolean).length;
-    return Math.round((completed / 5) * 100);
-  }, [enteredAcademy, currentQuizIndex, currentCaseIndex, identityResult, escaped]);
+    const completed = [enteredAcademy, currentQuizIndex >= quizQuestions.length, currentCaseIndex >= cases.length, !!identityResult, solvedEscapeRooms.length === escapeRooms.length, escaped].filter(Boolean).length;
+    return Math.round((completed / 6) * 100);
+  }, [enteredAcademy, currentQuizIndex, currentCaseIndex, identityResult, solvedEscapeRooms.length, escaped]);
 
   const handleAnswer = (answerType) => {
     if (answerType === currentQuestion.type) setScore((prev) => prev + 10);
@@ -107,7 +110,7 @@ function App() {
 
   const submitFinalCode = (event) => {
     event.preventDefault();
-    const submitted = finalCode.trim().toUpperCase().replace(/\s*→\s*/g, ' → ');
+    const submitted = finalCode.trim().toUpperCase().replace(/\s*(?:→|,)\s*/g, ' → ');
     if (submitted === finalEscapePhrase) {
       setEscaped(true);
       setEscapeFeedback('The final lock opens! You have escaped the Academy and earned the Master of Educational Thought badge.');

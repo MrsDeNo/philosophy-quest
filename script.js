@@ -1,1 +1,0 @@
-function showTab(id){document.querySelectorAll(".tab").forEach(t=>t.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}

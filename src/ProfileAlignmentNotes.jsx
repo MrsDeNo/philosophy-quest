@@ -10,6 +10,10 @@ const closestAlignments = {
   'Paulo Freire': 'Reconstructionism',
   'Nel Noddings': 'Progressivism',
   'George S. Counts': 'Reconstructionism',
+  'Confucius': 'Perennialism',
+  'William James': 'Progressivism',
+  'Jane Addams': 'Reconstructionism',
+  'W.E.B. Du Bois': 'Reconstructionism',
 };
 
 export default function ProfileAlignmentNotes() {

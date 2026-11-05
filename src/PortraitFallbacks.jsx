@@ -10,6 +10,10 @@ const portraitSources = {
   'Paulo Freire': 'https://commons.wikimedia.org/wiki/Special:FilePath/Paulo_Freire.jpg?width=180',
   'Nel Noddings': 'https://commons.wikimedia.org/wiki/Special:FilePath/Nel_Noddings.jpg?width=180',
   'George S. Counts': 'https://commons.wikimedia.org/wiki/Special:FilePath/George_S._Counts.jpg?width=180',
+  'Confucius': 'https://commons.wikimedia.org/wiki/Special:FilePath/Konfuzius-1770.jpg?width=180',
+  'William James': 'https://commons.wikimedia.org/wiki/Special:FilePath/William_James_b1842c.jpg?width=180',
+  'Jane Addams': 'https://commons.wikimedia.org/wiki/Special:FilePath/Jane_Addams_(1860-1935).jpg?width=180',
+  'W.E.B. Du Bois': 'https://commons.wikimedia.org/wiki/Special:FilePath/W.E.B._Du_Bois,_1918.jpg?width=180',
 };
 
 export default function PortraitFallbacks() {

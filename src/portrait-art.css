@@ -1,23 +1,19 @@
-/* Portrait gallery paintings clipped to the existing circular initials badges. */
+/* Local presentation for portraits with graceful initials fallback on image errors. */
 .thinker-grid .thinker-card .portrait {
-  display: block;
+  display: grid;
+  place-items: center;
   overflow: hidden;
-  color: transparent;
-  font-size: 0;
-  text-indent: -9999px;
-  background-color: #31233f;
+  color: #201427;
+  font-size: 1rem;
+  text-indent: 0;
+  background-image: none !important;
+  background-color: #d6c8ff;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   border: 2px solid rgba(245, 215, 119, .82);
   box-shadow: 0 0 0 3px rgba(20, 15, 28, .9), 0 0 18px rgba(245, 215, 119, .18);
 }
-.thinker-grid .thinker-card:nth-child(1) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Plato_Silanion_Musei_Capitolini_MC1377.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(2) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Aristotle_Altemps_Inv8575.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(3) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/John_Locke_by_Godfrey_Kneller.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(4) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Jacques_Rousseau_(painted_portrait).jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(5) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Maria_Montessori_1913.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(6) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/John_Dewey_in_1902.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(7) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Paulo_Freire.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(8) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Nel_Noddings.jpg?width=180'); }
-.thinker-grid .thinker-card:nth-child(9) .portrait { background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/George_S._Counts.jpg?width=180'); }
+.gallery-portrait-image { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.thinker-grid .thinker-card .portrait:not(.portrait-fallback) { color: transparent; }
+.thinker-grid .thinker-card .portrait-fallback { color: #201427; font-size: 1rem; text-indent: 0; font-weight: 800; }

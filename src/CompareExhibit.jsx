@@ -8,18 +8,6 @@ const dimensions = [
   ['contributions', 'Contributions'],
 ];
 
-const alignedPhilosophies = {
-  plato: 'Perennialism',
-  aristotle: 'Perennialism',
-  'john-locke': 'Essentialism',
-  'jean-jacques-rousseau': 'Existentialism',
-  'maria-montessori': 'Progressivism',
-  'john-dewey': 'Progressivism',
-  'paulo-freire': 'Reconstructionism',
-  'nel-noddings': 'Progressivism',
-  'george-s-counts': 'Reconstructionism',
-};
-
 export default function CompareExhibit({ philosophers }) {
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeDimension, setActiveDimension] = useState('beliefs');
@@ -29,7 +17,7 @@ export default function CompareExhibit({ philosophers }) {
   const sharedThemes = selected.length > 1
     ? (selected[0].themes ?? []).filter((theme) => selected.every((thinker) => (thinker.themes ?? []).includes(theme)))
     : [];
-  const philosophyFor = (thinker) => thinker.primaryPhilosophy ?? alignedPhilosophies[thinker.id] ?? 'Progressivism';
+  const philosophyFor = (thinker) => thinker.primaryPhilosophy;
 
   const toggle = (id) => {
     setSelectedIds((current) => current.includes(id)
@@ -84,7 +72,7 @@ export default function CompareExhibit({ philosophers }) {
             <caption>Thinker-by-thinker comparison · {selectedDimension[1]}</caption>
             <thead><tr><th scope="col">Comparison point</th>{selected.map((thinker) => <th scope="col" key={thinker.id}>{thinker.name}</th>)}</tr></thead>
             <tbody>
-              <tr><th scope="row">Primary educational philosophy</th>{selected.map((thinker) => <td key={thinker.id}>{philosophyFor(thinker)}</td>)}</tr>
+              <tr><th scope="row">Closest alignment among the six educational philosophies</th>{selected.map((thinker) => <td key={thinker.id}>{philosophyFor(thinker)}</td>)}</tr>
               <tr><th scope="row">Educational beliefs</th>{selected.map((thinker) => <td key={thinker.id}>{thinker.beliefs}</td>)}</tr>
               <tr><th scope="row">{selectedDimension[1]}</th>{selected.map((thinker) => <td key={thinker.id}>{thinker[activeDimension]}</td>)}</tr>
               <tr><th scope="row">Classroom connection</th>{selected.map((thinker) => <td key={thinker.id}>{thinker.classroom}</td>)}</tr>
@@ -93,11 +81,13 @@ export default function CompareExhibit({ philosophers }) {
           </table>
         </div>
 
+        <p className="alignment-caveat"><strong>About these alignments:</strong> “Closest alignment” is an instructional shorthand based on each thinker’s documented ideas. The six philosophies are broad traditions, and some thinkers are not members of a single school.</p>
+
         <section className="shared-theme-panel" aria-labelledby="shared-themes-heading">
           <h4 id="shared-themes-heading">Shared Ground</h4>
           {sharedThemes.length ? <ul>{sharedThemes.map((theme) => <li key={theme}>{theme}</li>)}</ul> : <p>No documented theme tags are shared by every selected thinker. Use the comparison table to explore their differences.</p>}
         </section>
-        <p className="comparison-note">Shared ground lists documented theme tags present in every selected profile; other similarities may still be worth discussing.</p>
+        <p className="comparison-note">Reflection: Which difference between these thinkers would most change what students experience in a classroom? What makes you say so?</p>
       </>}
     </div>
   );

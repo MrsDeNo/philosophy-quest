@@ -1,1 +1,1 @@
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.add("hidden"));document.getElementById(b.dataset.tab).classList.remove("hidden")});
+let xp=Number(localStorage.getItem("pq_xp")||0);document.getElementById("xp").textContent=xp;function earn(v){xp+=v;localStorage.setItem("pq_xp",xp);document.getElementById("xp").textContent=xp;}
